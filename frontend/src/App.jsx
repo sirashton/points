@@ -145,10 +145,7 @@ function App() {
     <div className="container">
       <div className="header">
         <h1>🎨 Pointillism Generator</h1>
-        <p>Transform your photos into beautiful pointillism art ✨</p>
-        <div style={{background: 'linear-gradient(45deg, #ff6b6b, #4ecdc4)', color: 'white', padding: '0.5rem 1rem', borderRadius: '20px', fontSize: '0.9rem', fontWeight: '600', marginTop: '1rem', display: 'inline-block', animation: 'pulse 2s infinite'}}>
-          🚀 DEPLOYMENT TEST - Changes Working!
-        </div>
+        <p>Transform your photos into pointillism art ✨</p>
       </div>
 
       <div className="controls-section">

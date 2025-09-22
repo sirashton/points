@@ -50,8 +50,24 @@ fi
 
 # Build and start services
 echo "🔨 Building and starting services..."
-sudo docker-compose -f docker-compose.prod.yml down || true
+
+# Force stop all containers and clean up
+echo "🛑 Stopping existing containers..."
+sudo docker-compose -f docker-compose.prod.yml down --remove-orphans || true
+
+# Kill any remaining containers that might be using ports
+echo "🧹 Cleaning up any remaining containers..."
+sudo docker kill $(sudo docker ps -q) 2>/dev/null || true
+
+# Wait a moment for ports to be released
+sleep 2
+
+# Build with no cache to ensure latest changes
+echo "🔨 Building services with latest changes..."
 sudo docker-compose -f docker-compose.prod.yml build --no-cache
+
+# Start services
+echo "🚀 Starting services..."
 sudo docker-compose -f docker-compose.prod.yml up -d
 
 # Show status
@@ -67,4 +83,4 @@ echo "📝 To view logs:"
 echo "   sudo docker-compose -f docker-compose.prod.yml logs -f"
 echo ""
 echo "🔄 To update:"
-echo "   git pull && sudo docker-compose -f docker-compose.prod.yml up -d --build"
+echo "   git pull && sudo docker-compose -f docker-compose.prod.yml down --remove-orphans && sudo docker-compose -f docker-compose.prod.yml up -d --build"
