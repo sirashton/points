@@ -48,6 +48,10 @@ if [ ! -d ".git" ]; then
     git clone https://github.com/sirashton/points.git .
 fi
 
+# Always pull latest changes
+echo "📥 Pulling latest changes from repository..."
+git pull origin main
+
 # Build and start services
 echo "🔨 Building and starting services..."
 
@@ -62,9 +66,13 @@ sudo docker kill $(sudo docker ps -q) 2>/dev/null || true
 # Wait a moment for ports to be released
 sleep 2
 
+# Clean up Docker images to ensure fresh build
+echo "🗑️ Cleaning up old Docker images..."
+sudo docker image prune -af || true
+
 # Build with no cache to ensure latest changes
-echo "🔨 Building services with latest changes..."
-sudo docker-compose -f docker-compose.prod.yml build --no-cache
+echo "🔨 Building services with latest changes (no cache)..."
+sudo docker-compose -f docker-compose.prod.yml build --no-cache --pull
 
 # Start services
 echo "🚀 Starting services..."
@@ -77,10 +85,10 @@ sudo docker-compose -f docker-compose.prod.yml ps
 
 echo ""
 echo " Your Pointillism Generator should now be available at:"
-echo "   http://your-domain.com"
+echo "   https://pointillism.gathered.consulting/"
 echo ""
 echo "📝 To view logs:"
 echo "   sudo docker-compose -f docker-compose.prod.yml logs -f"
 echo ""
 echo "🔄 To update:"
-echo "   git pull && sudo docker-compose -f docker-compose.prod.yml down --remove-orphans && sudo docker-compose -f docker-compose.prod.yml up -d --build"
+echo "   git pull && sudo docker-compose -f docker-compose.prod.yml down --remove-orphans && sudo docker-compose -f docker-compose.prod.yml build --no-cache --pull && sudo docker-compose -f docker-compose.prod.yml up -d"
