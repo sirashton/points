@@ -1,79 +1,38 @@
-# ⚡ Quick Deployment Reference
+# Quick Deploy Guide
 
-## 🚀 One-Command Deployment
+## Production Deployment
 
-```bash
-# On your DigitalOcean droplet
-curl -sSL https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/deploy.sh | bash
-```
+### Prerequisites
+- DigitalOcean account
+- Domain name
+- SSH key pair
 
-## 📋 Pre-Deployment Checklist
+### Steps
 
-- [ ] DigitalOcean droplet created (Ubuntu 22.04, $6/month plan)
-- [ ] Domain A record pointing to droplet IP
-- [ ] SSH access to droplet working
-- [ ] Repository is public or you have SSH keys set up
+1. **Create Droplet**
+   - Ubuntu 22.04 LTS
+   - 2GB RAM minimum (4GB recommended)
+   - Add your SSH key
 
-## 🔧 Essential Commands
+2. **Deploy Application**
+   ```bash
+   ssh root@YOUR_DROPLET_IP
+   curl -sSL https://raw.githubusercontent.com/sirashton/points/main/deploy.sh | bash
+   ```
 
-```bash
-# Deploy
-./deploy.sh
+3. **Configure Domain**
+   - Point A record to droplet IP
+   - Set up SSL with Certbot
 
-# Update
-git pull && sudo docker-compose -f docker-compose.prod.yml up -d --build
+4. **Verify Deployment**
+   - Visit your domain
+   - Test image upload and processing
+   - Check both algorithms work
 
-# View logs
-sudo docker-compose -f docker-compose.prod.yml logs -f
-
-# Check status
-sudo docker-compose -f docker-compose.prod.yml ps
-
-# Setup domain
-./setup-domain.sh
-```
-
-## 🌐 Domain Setup
-
-1. **DNS**: Add A record `pointillism.yourdomain.com` → `YOUR_DROPLET_IP`
-2. **Configure**: Run `./setup-domain.sh`
-3. **SSL**: Run `sudo certbot --nginx -d pointillism.yourdomain.com`
-
-## 🆘 Quick Fixes
-
-**App not loading?**
-```bash
-sudo docker-compose -f docker-compose.prod.yml logs
-sudo ufw status
-```
-
-**Domain not working?**
-```bash
-nslookup pointillism.yourdomain.com
-```
-
-**SSL issues?**
-```bash
-sudo certbot certificates
-sudo nginx -t
-```
-
-## 📊 Monitoring
-
-```bash
-# System resources
-htop
-
-# Docker resources
-sudo docker stats
-
-# Application health
-curl -I https://pointillism.yourdomain.com
-```
-
-## 💰 Estimated Costs
-
-- **Droplet**: $6/month (1GB RAM, 1 CPU, 25GB SSD)
-- **Domain**: $10-15/year (if you don't have one)
-- **SSL**: Free (Let's Encrypt)
-- **Total**: ~$7-8/month
+### Production Notes
+- Uses system Nginx as reverse proxy
+- Docker containers run on ports 3000 (frontend) and 5000 (backend)
+- Includes swap space for memory-intensive builds
+- Automatic restart on failure
+- Gzip compression enabled
+- Static asset caching
