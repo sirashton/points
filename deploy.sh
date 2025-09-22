@@ -32,13 +32,10 @@ echo "📁 Setting up application directory..."
 sudo mkdir -p /opt/pointillism
 cd /opt/pointillism
 
-# Clone your repository (replace with your actual repo URL)
+# Clone your repository
 echo "📥 Cloning repository..."
 if [ ! -d ".git" ]; then
-    # Replace this with your actual repository URL
-    echo "Please update this script with your repository URL"
-    echo "Example: git clone https://github.com/yourusername/pointillism-generator.git ."
-    exit 1
+    git clone https://github.com/sirashton/points.git .
 fi
 
 # Build and start services
