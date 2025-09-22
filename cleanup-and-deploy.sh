@@ -34,7 +34,8 @@ df -h
 
 # Pull latest changes from GitHub
 echo "📥 Pulling latest changes..."
-git pull origin main
+git fetch origin
+git reset --hard origin/main
 
 # Force stop all containers and clean up
 echo "🛑 Stopping existing containers..."

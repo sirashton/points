@@ -50,7 +50,8 @@ fi
 
 # Always pull latest changes
 echo "📥 Pulling latest changes from repository..."
-git pull origin main
+git fetch origin
+git reset --hard origin/main
 
 # Build and start services
 echo "🔨 Building and starting services..."
