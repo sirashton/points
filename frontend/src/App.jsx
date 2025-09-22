@@ -145,7 +145,7 @@ function App() {
     <div className="container">
       <div className="header">
         <h1>🎨 Pointillism Generator</h1>
-        <p>Transform your photos into beautiful pointillism art</p>
+        <p>Transform your photos into beautiful pointillism art ✨</p>
       </div>
 
       <div className="controls-section">
