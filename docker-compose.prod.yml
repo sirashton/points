@@ -1,31 +1,23 @@
-version: '3.8'
-
 services:
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    container_name: points-backend
-    restart: unless-stopped
-    environment:
-      - FLASK_ENV=production
-    networks:
-      - points-network
-
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: points-frontend
-    restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443"
+      - "3000:80"
+    volumes:
+      - ./frontend/nginx.prod.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - backend
-    networks:
-      - points-network
+    restart: always
 
-networks:
-  points-network:
-    driver: bridge
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      FLASK_ENV: production
+    command: python app.py
+    restart: always

@@ -27,6 +27,16 @@ if ! command -v docker-compose &> /dev/null; then
     sudo chmod +x /usr/local/bin/docker-compose
 fi
 
+# Add swap space if not exists (helps with memory issues during build)
+if [ ! -f /swapfile ]; then
+    echo " Adding swap space..."
+    sudo fallocate -l 2G /swapfile
+    sudo chmod 600 /swapfile
+    sudo mkswap /swapfile
+    sudo swapon /swapfile
+    echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+fi
+
 # Create application directory
 echo "📁 Setting up application directory..."
 sudo mkdir -p /opt/pointillism
@@ -50,7 +60,7 @@ echo "📊 Service status:"
 sudo docker-compose -f docker-compose.prod.yml ps
 
 echo ""
-echo "🌐 Your Pointillism Generator should now be available at:"
+echo " Your Pointillism Generator should now be available at:"
 echo "   http://your-domain.com"
 echo ""
 echo "📝 To view logs:"
